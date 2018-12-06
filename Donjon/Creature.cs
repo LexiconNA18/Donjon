@@ -1,6 +1,11 @@
 ﻿namespace Donjon
 {
-    public class Creature
+    public class Creature : Entity
     {
+        public Creature(string symbol) : base(symbol)
+        {
+
+        }
+ 
     }
 }
