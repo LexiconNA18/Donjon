@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Donjon
 {
@@ -29,7 +30,7 @@ namespace Donjon
             {
                 for (int y = 0; y < height; y++)
                 {
-                    cells[x, y] = new Cell();
+                    cells[x, y] = new Cell(x, y);
                 }
             }
         }
@@ -37,7 +38,30 @@ namespace Donjon
 
         internal Cell Cell(int x, int y)
         {
+            if (x < 0 || y < 0) return null;
+            if (x >= Width || y >= Height) return null;
             return cells[x, y];
+        }
+
+        internal bool MoveCreature(Creature creature, int dx, int dy, List<string> messages = null)
+        {
+            int oldX = creature.X;
+            int oldY = creature.Y;
+
+            var newX = oldX + dx;
+            var newY = oldY + dy;
+
+            Cell newCell = Cell(newX, newY);
+            if (newCell == null) return false;
+            if (newCell.Creature != null) return false;
+
+            Cell(oldX, oldY).Creature = null;            
+            newCell.Creature = creature;
+            
+            if (messages != null) {
+                messages.Add("The creature moves one step");
+            }
+            return true;
         }
     }
 }

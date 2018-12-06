@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Donjon
 {
@@ -12,12 +13,61 @@ namespace Donjon
             map = new Map(width: 15, height: 15);
             hero = new Hero();
         }
-        
+
         internal void Run()
         {
             Init();
-
             Draw();
+            bool gameInProcess = true;
+            List<string> messages = new List<string>();
+
+            do
+            {
+                // input
+                var key = Console.ReadKey(intercept: true).Key;
+
+                // act
+                bool action = false;
+                switch (key)
+                {
+                    case ConsoleKey.X:
+                    case ConsoleKey.Q:
+                        // avsluta spelet
+                        gameInProcess = false;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        // gå norrut
+                        action = map.MoveCreature(hero, dx: 0, dy: -1, messages: messages);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        // gå norrut
+                        action = map.MoveCreature(hero, dx: 0, dy: 1, messages: messages);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        // gå norrut
+                        action = map.MoveCreature(hero, dx: -1, dy: 0, messages: messages);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        // gå norrut
+                        action = map.MoveCreature(hero, dx: 1, dy: 0, messages: messages);
+                        break;
+                    default:
+                        // känns inte igen
+                        break;
+                }
+
+                // draw
+                Draw();
+                if (!action)
+                {
+                    messages.Add("No action");
+                }
+                foreach (var m in messages)
+                {
+                    Console.WriteLine(m);
+                }
+
+            } while (gameInProcess);
         }
 
         private void Init()
@@ -29,6 +79,7 @@ namespace Donjon
 
         private void Draw()
         {
+            Console.Clear();
             for (int y = 0; y < map.Height; y++)
             {
                 string row = "";
@@ -36,7 +87,7 @@ namespace Donjon
                 {
                     var cell = map.Cell(x, y);
                     var symbol = cell.Symbol;
-                    row += " " + symbol;                  
+                    row += " " + symbol;
                 }
                 Console.WriteLine(row);
             }
