@@ -2,12 +2,11 @@
 
 namespace Donjon
 {
-    public class Item : Entity
+    class Monster : Creature
     {
-        public Item(string symbol, ConsoleColor color, string name)
+        public Monster(string symbol, ConsoleColor color, string name) 
             : base(symbol, color, name)
         {
-
         }
     }
 }

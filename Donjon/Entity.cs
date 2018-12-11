@@ -1,12 +1,17 @@
-﻿namespace Donjon
+﻿using System;
+namespace Donjon
 {
     public abstract class Entity
     {
         public string Symbol { get; private set; }
+        public ConsoleColor Color { get; private set; }
+        public string Name { get; private set; }
 
-        public Entity(string symbol)
+        public Entity(string symbol, ConsoleColor color, string name)
         {
-            this.Symbol = symbol;
+            Symbol = symbol;
+            Color = color;
+            Name = name;
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Donjon
     {
         Cell[,] cells;
 
+        private Messages messages = new Messages();
+
         private int width;
         public int Width {
             get => width;
@@ -35,6 +37,10 @@ namespace Donjon
             }
         }
 
+        internal void SetMessageHandler(Messages messages)
+        {
+            this.messages = messages;
+        }
 
         internal Cell Cell(int x, int y)
         {
@@ -43,7 +49,7 @@ namespace Donjon
             return cells[x, y];
         }
 
-        internal bool MoveCreature(Creature creature, int dx, int dy, List<string> messages = null)
+        internal bool MoveCreature(Creature creature, int dx, int dy)
         {
             int oldX = creature.X;
             int oldY = creature.Y;
@@ -53,14 +59,18 @@ namespace Donjon
 
             Cell newCell = Cell(newX, newY);
             if (newCell == null) return false;
-            if (newCell.Creature != null) return false;
+            if (newCell.Creature != null)
+            {
+                creature.Fight(newCell.Creature);
+                return true;
+            }
 
             Cell(oldX, oldY).Creature = null;            
             newCell.Creature = creature;
             
-            if (messages != null) {
-                messages.Add("The creature moves one step");
-            }
+            
+            messages.Add("The creature moves one step");
+            
             return true;
         }
     }

@@ -5,13 +5,14 @@ namespace Donjon
 {
     internal class Game
     {
-        Map map;
-        Hero hero;
+        private Map map;
+        private Hero hero;
+        private Messages messages = new Messages();
 
         public Game()
         {
             map = new Map(width: 15, height: 15);
-            hero = new Hero();
+
         }
 
         internal void Run()
@@ -19,7 +20,8 @@ namespace Donjon
             Init();
             Draw();
             bool gameInProcess = true;
-            List<string> messages = new List<string>();
+
+
 
             do
             {
@@ -37,19 +39,19 @@ namespace Donjon
                         break;
                     case ConsoleKey.UpArrow:
                         // gå norrut
-                        action = map.MoveCreature(hero, dx: 0, dy: -1, messages: messages);
+                        action = map.MoveCreature(hero, dx: 0, dy: -1);
                         break;
                     case ConsoleKey.DownArrow:
                         // gå norrut
-                        action = map.MoveCreature(hero, dx: 0, dy: 1, messages: messages);
+                        action = map.MoveCreature(hero, dx: 0, dy: 1);
                         break;
                     case ConsoleKey.LeftArrow:
                         // gå norrut
-                        action = map.MoveCreature(hero, dx: -1, dy: 0, messages: messages);
+                        action = map.MoveCreature(hero, dx: -1, dy: 0);
                         break;
                     case ConsoleKey.RightArrow:
                         // gå norrut
-                        action = map.MoveCreature(hero, dx: 1, dy: 0, messages: messages);
+                        action = map.MoveCreature(hero, dx: 1, dy: 0);
                         break;
                     default:
                         // känns inte igen
@@ -62,19 +64,46 @@ namespace Donjon
                 {
                     messages.Add("No action");
                 }
-                foreach (var m in messages)
+                foreach (string m in messages.GetAll())
                 {
                     Console.WriteLine(m);
                 }
+                messages.Clear();
 
             } while (gameInProcess);
         }
 
         private void Init()
         {
+
+            map.SetMessageHandler(messages);
+
+            hero = new Hero()
+            {
+                Health = 10,
+                Damage = 3
+            };
+            hero.SetMessageHandler(messages);
             map.Cell(1, 1).Creature = hero;
-            map.Cell(5, 4).Creature = new Creature("M");
-            map.Cell(3, 5).Items.Add(new Item("i"));
+
+            Monster troll = new Monster("T", ConsoleColor.Green, "Troll")
+            {
+                Health = 4,
+                Damage = 2,
+            };
+            troll.SetMessageHandler(messages);
+            map.Cell(5, 4).Creature = troll;
+
+            Monster orc = new Monster("O", ConsoleColor.Green, "Orc")
+            {
+                Health = 3,
+                Damage = 1,
+            };
+            orc.SetMessageHandler(messages);
+            map.Cell(8, 5).Creature = orc;
+
+            Item sock = new Item("s", ConsoleColor.Gray, "dirty sock");
+            map.Cell(3, 5).Items.Add(sock);
         }
 
         private void Draw()
