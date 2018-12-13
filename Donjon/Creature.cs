@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Donjon
 {
     public class Creature : Entity
     {
-        private Messages messages = new Messages();
-
+        
         public Creature(string symbol, ConsoleColor color, string name)
             : base(symbol, color, name)
         {
         }
+
+        public override ConsoleColor Color => IsDead ? ConsoleColor.DarkGray : base.Color;
 
         public int X { get; internal set; }
         public int Y { get; internal set; }
@@ -19,9 +21,14 @@ namespace Donjon
 
         public bool IsDead => Health <= 0;
 
-        internal void SetMessageHandler(Messages messages)
+        private Action<string> addMessage = s => { };
+        // Fattigmanshändelsehanterare
+        // private List<Action<string>> onMessage = new List<Action<string>>();
+
+
+        internal void SetMessageHandler(Action<string> addMessage)
         {
-            this.messages = messages;
+            this.addMessage = addMessage;
         }
 
         public void Fight(Creature target)
@@ -29,17 +36,17 @@ namespace Donjon
             if (target.IsDead) return;
 
             target.Health -= Damage;
-            messages.Add($"The {Name} attacks the {target.Name} for {Damage} damage");
+            addMessage($"The {Name} attacks the {target.Name} for {Damage} damage");
             if (target.IsDead) {
-                messages.Add($"The {target.Name} is dead");
+                addMessage($"The {target.Name} is dead");
                 return;
             }
 
             Health -= target.Damage;
-            messages.Add($"The {target.Name} attacks the {Name} for {target.Damage} damage");
+            addMessage($"The {target.Name} attacks the {Name} for {target.Damage} damage");
             if (IsDead)
             {
-                messages.Add($"The {Name} is dead");
+                addMessage($"The {Name} is dead");
                 return;
             }
         }

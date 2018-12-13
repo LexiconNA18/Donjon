@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Donjon
@@ -9,7 +10,7 @@ namespace Donjon
     {
         Cell[,] cells;
 
-        private Messages messages = new Messages();
+        private Action<string> addMessage = s => { };
 
         private int width;
         public int Width {
@@ -37,9 +38,19 @@ namespace Donjon
             }
         }
 
-        internal void SetMessageHandler(Messages messages)
+        internal void RemoveDeadMonsters()
         {
-            this.messages = messages;
+            foreach (var cell in cells) {
+                if (cell.Creature != null && cell.Creature.IsDead)
+                {
+                    cell.Creature = null;
+                }
+            }
+        }
+
+        internal void SetMessageHandler(Action<string> addMessage)
+        {
+            this.addMessage = this.addMessage;
         }
 
         internal Cell Cell(int x, int y)
@@ -69,7 +80,7 @@ namespace Donjon
             newCell.Creature = creature;
             
             
-            messages.Add("The creature moves one step");
+            addMessage($"The {creature.Name} moves one step");
             
             return true;
         }

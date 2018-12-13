@@ -18,7 +18,7 @@ namespace Donjon
         internal void Run()
         {
             Init();
-            Draw();
+            DrawMap();
             bool gameInProcess = true;
 
 
@@ -27,6 +27,8 @@ namespace Donjon
             {
                 // input
                 var key = Console.ReadKey(intercept: true).Key;
+
+                map.RemoveDeadMonsters();
 
                 // act
                 bool action = false;
@@ -59,11 +61,13 @@ namespace Donjon
                 }
 
                 // draw
-                Draw();
+                DrawMap();
                 if (!action)
                 {
                     messages.Add("No action");
                 }
+
+                Console.ForegroundColor = ConsoleColor.White;
                 foreach (string m in messages.GetAll())
                 {
                     Console.WriteLine(m);
@@ -76,14 +80,14 @@ namespace Donjon
         private void Init()
         {
 
-            map.SetMessageHandler(messages);
+            map.SetMessageHandler(messages.Add);
 
             hero = new Hero()
             {
                 Health = 10,
                 Damage = 3
             };
-            hero.SetMessageHandler(messages);
+            hero.SetMessageHandler(messages.Add);
             map.Cell(1, 1).Creature = hero;
 
             Monster troll = new Monster("T", ConsoleColor.Green, "Troll")
@@ -91,7 +95,7 @@ namespace Donjon
                 Health = 4,
                 Damage = 2,
             };
-            troll.SetMessageHandler(messages);
+            troll.SetMessageHandler(messages.Add);
             map.Cell(5, 4).Creature = troll;
 
             Monster orc = new Monster("O", ConsoleColor.Green, "Orc")
@@ -99,26 +103,28 @@ namespace Donjon
                 Health = 3,
                 Damage = 1,
             };
-            orc.SetMessageHandler(messages);
+            orc.SetMessageHandler(messages.Add);
             map.Cell(8, 5).Creature = orc;
 
             Item sock = new Item("s", ConsoleColor.Gray, "dirty sock");
             map.Cell(3, 5).Items.Add(sock);
         }
 
-        private void Draw()
+        private void DrawMap()
         {
+            Console.CursorVisible = false;
             Console.Clear();
+            //Console.SetCursorPosition(0, 0);
             for (int y = 0; y < map.Height; y++)
             {
-                string row = "";
                 for (int x = 0; x < map.Width; x++)
                 {
                     var cell = map.Cell(x, y);
                     var symbol = cell.Symbol;
-                    row += " " + symbol;
+                    Console.ForegroundColor = cell.Color;
+                    Console.Write(" " + symbol);
                 }
-                Console.WriteLine(row);
+                Console.WriteLine();
             }
         }
     }

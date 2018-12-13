@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Donjon
 {
@@ -26,6 +28,7 @@ namespace Donjon
             }
         }
         public List<Item> Items { get; set; } = new List<Item>();
+
         public string Symbol {
             get {
                 if (Creature != null) return Creature.Symbol;
@@ -34,5 +37,9 @@ namespace Donjon
             }
         }
 
+        public ConsoleColor Color => 
+            Creature?.Color ?? 
+            Items.FirstOrDefault()?.Color ?? 
+            ConsoleColor.DarkGray;
     }
 }
