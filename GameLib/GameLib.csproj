@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{11338944-F79F-4BFD-97DD-6F012C111521}</ProjectGuid>
+    <ProjectGuid>{E5D90185-7199-40B5-A5D9-4F98FD354D07}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Donjon</RootNamespace>
-    <AssemblyName>Donjon</AssemblyName>
+    <RootNamespace>GameLib</RootNamespace>
+    <AssemblyName>GameLib</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,30 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
-    <Compile Include="Creature.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="Hero.cs" />
-    <Compile Include="IDrawable.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="IUsable.cs" />
-    <Compile Include="Map.cs" />
-    <Compile Include="Messages.cs" />
-    <Compile Include="Monster.cs" />
-    <Compile Include="Potion.cs" />
+    <Compile Include="LimitedList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GameLib\GameLib.csproj">
-      <Project>{e5d90185-7199-40b5-a5d9-4f98fd354d07}</Project>
-      <Name>GameLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

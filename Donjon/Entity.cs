@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Donjon
 {
-    public abstract class Entity
+    public abstract class Entity : IDrawable
     {
         public string Symbol { get; private set; }
         public virtual ConsoleColor Color { get; private set; }

@@ -24,6 +24,13 @@ namespace Donjon
             private set { height = value; }
         }
 
+        public List<Monster> Monsters => cells
+            .OfType<Cell>()
+            .Select(c => c.Creature)
+            .OfType<Monster>()
+            .Where(m => !m.IsDead)
+            .ToList();
+
         public Map(int width, int height)
         {
             this.Width = width;
@@ -50,7 +57,7 @@ namespace Donjon
 
         internal void SetMessageHandler(Action<string> addMessage)
         {
-            this.addMessage = this.addMessage;
+            this.addMessage = addMessage;
         }
 
         internal Cell Cell(int x, int y)
